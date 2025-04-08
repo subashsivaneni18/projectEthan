@@ -1,0 +1,55 @@
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+
+model User{
+ id    String @id @default(auto()) @map("_id") @db.ObjectId
+ email String @unique
+ name String
+ isAdmin Boolean @default(false)
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ OrderIds String[]
+}
+
+
+model Order {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  cartItemIds  String[] 
+  userId String 
+  paymentStatus Boolean @default(false)
+  completedStatus Boolean @default(false)
+  TableNo Int
+  TotalValue Int @default(0)
+}
+
+model Item {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name   String
+  price  Int
+  description String
+  Image String
+  Ratings Float @default(0)
+}
+
+model CartItem{
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  itemId String
+  name   String
+  price  Int
+  quantity Int 
+}
+
+
+
+
+
+
