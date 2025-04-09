@@ -29,6 +29,7 @@ model Order {
   completedStatus Boolean @default(false)
   TableNo Int
   TotalValue Int @default(0)
+  createdAt DateTime @default(now())
 }
 
 model Item {
@@ -48,6 +49,12 @@ model CartItem{
   quantity Int 
 }
 
+
+model TableRequest{
+   id     String @id @default(auto()) @map("_id") @db.ObjectId
+   TableNumber Int
+   completedStatus Boolean @default(false)
+}
 
 
 

@@ -19,6 +19,7 @@ const Navbar = () => {
   const { user } = useUser();
   const [currUser, setCurrUser] = useState<User | null>(null);
   const { tableNo } = useCartStore();
+  
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -38,6 +39,37 @@ const Navbar = () => {
 
   const menuLink = tableNo ? `/${tableNo}/Menu` : "/select-table";
 
+const handleTableCall = async () => {
+  let currentTableNo = tableNo;
+
+  if (!currentTableNo) {
+    const userInput = prompt("Please enter your table number:");
+
+    if (userInput && !isNaN(Number(userInput))) {
+      currentTableNo = Number(userInput); // convert to number
+      useCartStore.getState().setTableNo(currentTableNo);
+    } else {
+      alert("Invalid table number.");
+      return;
+    }
+  }
+
+  alert(`A waiter has been notified for table ${currentTableNo}. Please wait!`);
+
+  try {
+    const res = await axios.post("/api/TableCall", {
+      tableNo: Number(currentTableNo), // ensure it's a number
+      userId: currUser?.id, // ✅ include userId here
+    });
+
+    console.log(res.data);
+  } catch (error) {
+    console.error("Error notifying waiter:", error);
+    alert("Failed to notify the waiter. Please try again.");
+  }
+};
+
+
   return (
     <div className="bg-blue-600 text-white p-4 shadow-md transition-all">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -46,7 +78,7 @@ const Navbar = () => {
             My Website
           </Link>
         </div>
-        <div className="hidden md:flex space-x-6">
+        <div className="hidden md:flex space-x-6 items-center">
           <Link href="/" className="hover:text-gray-300 transition-all">
             Home
           </Link>
@@ -72,6 +104,12 @@ const Navbar = () => {
               Admin
             </Link>
           )}
+          <button
+            onClick={handleTableCall}
+            className="bg-white text-blue-600 font-semibold px-4 py-2 rounded hover:bg-gray-100 transition-all"
+          >
+            Table Call
+          </button>
         </div>
         <div className="md:hidden">
           <button onClick={toggleMenu} className="text-white">
@@ -142,6 +180,15 @@ const Navbar = () => {
               Admin
             </Link>
           )}
+          <button
+            onClick={() => {
+              handleTableCall();
+              toggleMenu();
+            }}
+            className="bg-white text-blue-600 font-semibold px-4 py-2 rounded hover:bg-gray-100 transition-all"
+          >
+            Table Call
+          </button>
         </div>
       </div>
     </div>

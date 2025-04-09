@@ -91,7 +91,7 @@ export default function Home() {
         {showCompleted ? "Completed Orders" : "Current Orders"}
       </h1>
 
-      <div className="flex justify-center mb-6 gap-4">
+      <div className="flex justify-center mb-6 gap-4 flex-wrap">
         <Button
           variant={!showCompleted ? "default" : "outline"}
           onClick={() => setShowCompleted(false)}
@@ -109,6 +109,9 @@ export default function Home() {
         </Button>
         <Button variant="outline" onClick={() => router.push("/delProduct")}>
           Delete Product
+        </Button>
+        <Button variant="outline" onClick={() => router.push("/tableRequests")}>
+          Table Requests
         </Button>
       </div>
 

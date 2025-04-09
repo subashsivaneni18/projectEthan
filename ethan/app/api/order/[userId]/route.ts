@@ -3,22 +3,20 @@ import prisma from "@/libs/prisma";
 
 export async function GET(
   req: Request,
-  { params }: { params: { userId: string } }
+  context: { params: { userId: string } }
 ) {
   try {
-    const userId = params.userId;
+    const userId = await context.params.userId;
 
     if (!userId || typeof userId !== "string") {
-      return NextResponse.json({ error: "Invalid userId" });
+      return NextResponse.json({ error: "Invalid userId" }, { status: 400 });
     }
 
-    // Fetch all orders for the user
     const userOrders = await prisma.order.findMany({
       where: { userId },
-      // orderBy: { created: "desc" },
+      orderBy: { createdAt: "desc" },
     });
 
-    // Populate cart item details for each order
     const enrichedOrders = await Promise.all(
       userOrders.map(async (order) => {
         const cartItems = await prisma.cartItem.findMany({
@@ -39,6 +37,9 @@ export async function GET(
     return NextResponse.json(enrichedOrders);
   } catch (error) {
     console.error("Fetch Orders Error:", error);
-    return NextResponse.json({ error: "Internal server error" });
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }

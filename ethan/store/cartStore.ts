@@ -12,8 +12,8 @@ interface CartItem extends Item {
 
 interface CartState {
   cart: CartItem[];
-  tableNo: string | null;
-  setTableNo: (tableNo: string) => void;
+  tableNo: number | null; // ✅ tableNo is now number (not string)
+  setTableNo: (tableNo: number) => void; // ✅ accepts number
   addToCart: (item: Item) => void;
   removeFromCart: (id: string) => void;
   increaseQty: (id: string) => void;
@@ -68,7 +68,7 @@ export const useCartStore = create<CartState>((set, get) => ({
       }
       return {
         cart: state.cart.map((i) =>
-          i.id === id ? { ...i, quantity: i.quantity - 1 } : i
+          i.id === id ? { ...i, quantity: item.quantity - 1 } : i
         ),
       };
     });
