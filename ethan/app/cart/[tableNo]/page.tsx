@@ -5,7 +5,7 @@ import { useCartStore } from "@/store/cartStore";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { mutate } from "swr"; // 👈 Import this
 
 const CartPage = () => {
@@ -13,6 +13,7 @@ const CartPage = () => {
     useCartStore();
   const { user } = useUser();
   const params = useParams();
+  const router = useRouter()
 
   const [loading, setLoading] = useState(false);
 
@@ -46,6 +47,7 @@ const CartPage = () => {
 
       // 🔄 Trigger re-fetch in Home page
       mutate("/api/order/fetchAll");
+      router.push(`/waitingList/${currUser.data.id}`);
     } catch (error) {
       console.error("Error placing order:", error);
     } finally {

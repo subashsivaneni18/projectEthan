@@ -38,7 +38,6 @@ const Navbar = () => {
 
   const menuLink = tableNo ? `/${tableNo}/Menu` : "/select-table";
 
-
   return (
     <div className="bg-blue-600 text-white p-4 shadow-md transition-all">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -60,6 +59,14 @@ const Navbar = () => {
           <Link href="/contact" className="hover:text-gray-300 transition-all">
             Contact
           </Link>
+          {currUser?.id && (
+            <Link
+              href={`/waitingList/${currUser.id}`}
+              className="hover:text-gray-300 transition-all"
+            >
+              Waiting List
+            </Link>
+          )}
           {currUser?.isAdmin && (
             <Link href="/admin" className="hover:text-gray-300 transition-all">
               Admin
@@ -117,6 +124,15 @@ const Navbar = () => {
           >
             Contact
           </Link>
+          {currUser?.id && (
+            <Link
+              href={`/waitingList/${currUser.id}`}
+              className="hover:text-gray-300"
+              onClick={toggleMenu}
+            >
+              Waiting List
+            </Link>
+          )}
           {currUser?.isAdmin && (
             <Link
               href="/admin"
